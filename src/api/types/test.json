@@ -1,0 +1,65 @@
+
+
+{
+    "success": true,
+    "result": [
+        {
+            "_id": "64242055aa500de66c7d9760",
+            "type": "configuration",
+            "configuration": [
+                {
+                    "_id": "first_name",
+                    "label": "First Name",
+                    "required": true,
+                    "type": "text",
+                    "minLength": 3,
+                    "maxLength": 25
+                },
+                {
+                    "_id": "last_name",
+                    "label": "Last Name",
+                    "required": false,
+                    "type": "text",
+                    "minLength": 3,
+                    "maxLength": 25
+                },
+                {
+                    "_id": "gender",
+                    "label": "Gender",
+                    "required": true,
+                    "type": "dropdown",
+                    "multi-select": false,
+                    "options": [
+                        {
+                            "_id": "male",
+                            "label": "Male"
+                        },
+                        {
+                            "_id": "female",
+                            "label": "Female"
+                        },
+                        {
+                            "_id": "others",
+                            "label": "Others"
+                        }
+                    ]
+                },
+                {
+                    "_id": "email",
+                    "label": "Email",
+                    "required": true,
+                    "type": "email",
+                    "repeating": false,
+                    "unique": false
+                },
+                {
+                    "_id": "phone",
+                    "type": "phone",
+                    "required": true,
+                    "repeating": false,
+                    "unique": false
+                }
+            ]
+        }
+    ]
+}
