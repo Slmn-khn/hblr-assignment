@@ -1,15 +1,15 @@
-export interface userDetailsType {
+export interface userTableDetailsType {
     success: boolean;
-    result: Array<userDetailsResult>;
+    result: Array<userTableDetailsResult>;
 }
 
-export interface userDetailsResult {
+export interface userTableDetailsResult {
     _id: string;
     type: string;
-    configuration: Array<userDetailsResultconfiguration>
+    configuration: Array<userTableDetailsResultconfiguration>
 }
 
-export interface userDetailsResultconfiguration {
+export interface userTableDetailsResultconfiguration {
     _id: string;
     label: string;
     required: boolean;
@@ -30,6 +30,20 @@ export interface ResultconfigurationOptions {
 
 export interface UserDetailsTableRow {
     key: React.Key;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+    gender: string;
+}
+
+export interface userDetails {
+    success: boolean;
+    result: Array<userDetailsResult>;
+}
+
+export interface userDetailsResult {
+    _id: string;
     first_name: string;
     last_name: string;
     email: string;

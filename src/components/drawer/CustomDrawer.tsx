@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import type { DrawerProps } from 'antd';
 import { Drawer } from 'antd';
 import DrawerContents from '../drawer/DrawerContents';
-import { userDetailsResultconfiguration } from '../../api/types/index';
+import { userTableDetailsResultconfiguration } from 'api/types';
 
 interface CustomDrawerProps {
     placement: DrawerProps['placement'];
     drawerState: boolean;
     onClose: () => void;
-    details: Array<userDetailsResultconfiguration>
+    details: any
 }
 const CustomDrawer: React.FC<CustomDrawerProps> = ({ placement, drawerState, onClose, details }: CustomDrawerProps) => {
     return (
         <>
             <Drawer
-                title="Basic Drawer"
+                title="Enter user details"
                 placement={placement || 'left'}
                 closable={false}
                 onClose={onClose}

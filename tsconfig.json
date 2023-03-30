@@ -11,13 +11,35 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "rootDirs": ["src"],
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": "./src",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@api": ["./src/api"],
+      "@api/*": ["./src/api/*"],
+      "@services": ["./src/services"],
+      "@services/*": ["./src/services/*"],
+      "@types": ["./src/services/types"],
+      "@consts": ["./src/consts"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["src/**/*", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
+
+
+// "paths": {
+//   "@api": ["api"],
+//   "@api/*": ["api/*"],
+//   "@services": ["services"],
+//   "@services/*": ["services/*"],
+//   "@baseService": ["services/base/index"],
+//   "@userService": ["services/user/index"],
+//   "@serviceUtils": ["services/utils/index"],
+//   "@utils": ["utils"],
+//   "@utils/*": ["utils/*"],
+//   "@types": ["types"]
+// },

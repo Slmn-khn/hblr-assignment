@@ -1,9 +1,8 @@
 import React from 'react';
-import { Formik } from 'formik';
 import styles from '@/styles/Home.module.css'
 import { Button, Form, Input, InputNumber, Select } from 'antd';
-import { userDetailsResultconfiguration } from '../../api/types/index';
-import { userFormLabels } from '../../consts/index';
+import { useAddUserDetails } from 'api/apiHooks';
+import { userFormLabels } from 'consts';
 
 const { Option } = Select;
 
@@ -17,12 +16,13 @@ const tailLayout = {
 };
 
 interface DrawerContentsProps {
-    details: Array<userDetailsResultconfiguration>
+    details: any
 };
 const DrawerContents: React.FC<DrawerContentsProps> = ({ details }: DrawerContentsProps) => {
     const [form] = Form.useForm();
+    const { isLoading, error, userDetailsResponse, addUserData } = useAddUserDetails();
     const onFinish = (values: any) => {
-        console.log(values);
+        addUserData(values);
     };
 
     const onGenderChange = (value: string) => {
@@ -95,7 +95,7 @@ const DrawerContents: React.FC<DrawerContentsProps> = ({ details }: DrawerConten
         }
         return
     }
-    
+
     return (
         <div className={styles.drawerContentsList}>
             <Form
@@ -119,7 +119,6 @@ const DrawerContents: React.FC<DrawerContentsProps> = ({ details }: DrawerConten
                     </Button>
                 </Form.Item>
             </Form>
-
         </div>
     )
 };

@@ -5,3 +5,15 @@ export enum userFormLabels {
     phone = "phone",
     gender = "gender",
 }
+
+export enum userDetailsAPIParams {
+    getTypes = 'zac',
+    getDetails = 'srinivas'
+}
+
+export enum drawerPlacement {
+    left = 'left',
+    right = 'right',
+    top = 'top',
+    bottom = 'bottom'
+}

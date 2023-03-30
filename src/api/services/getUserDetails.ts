@@ -1,10 +1,10 @@
 import service from './baseService';
-import { userDetailsType } from '../types/index'
-type GetUserDetails = <T>() => Promise<T>;
 
-const getUserDetails: GetUserDetails = async () => {
+type GetUserDetails = <T>(parm: string) => Promise<T>;
+
+const getUserDetails: GetUserDetails = async (parm: string) => {
     try {
-        const reqPath = `https://sandapps.hubblerapp.com/testrest/zac`;
+        const reqPath = `${process.env.NEXT_PUBLIC_SERVICE_URL}/${parm}`;
         const userDetails: any = await service.get(reqPath, {});
         return userDetails;
     } catch (err) {

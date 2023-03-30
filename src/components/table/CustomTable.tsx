@@ -4,38 +4,39 @@ import styled from "styled-components";
 import { Table } from 'antd';
 import { TableProps } from "antd/lib/table";
 import type { ColumnsType } from 'antd/es/table';
-import { UserDetailsTableRow } from '../../api/types/index'
+import { UserDetailsTableRow } from 'api/types'
 
 interface CustomTableProps {
     userData: any
+    tableKeysData: any
 }
-
 
 const StyledTable = styled((props: any) => <Table {...props} />)`
 && tbody > tr:hover > td {
   background: #e6f7ff !important;
 }
 `;
-const CustomTable: React.FC<CustomTableProps> = ({ userData }) => {
-    const test: any = [];
+const CustomTable: React.FC<CustomTableProps> = ({ userData, tableKeysData }) => {
     const data: UserDetailsTableRow[] = [];
     const [columns, setColumns] = React.useState<ColumnsType<UserDetailsTableRow>>();
     const [pagination, setPagination] = React.useState({});
-    const [datas, setDatas] = React.useState();
+    const [datas, setDatas] = React.useState<any>([]);
+
     React.useEffect(() => {
-        if (userData) {
-            userData.map((ele: any, index: number) => {
+        const tempKeys: any = [];
+        if (tableKeysData) {
+            tableKeysData.map((ele: any, index: number) => {
                 if (!ele.label) {
                     ele.label = ele._id
                 }
-                test.push({
+                tempKeys.push({
                     title: ele.label,
                     dataIndex: ele._id,
                     width: "20%"
                 }
                 )
             })
-            test.push({
+            tempKeys.push({
                 title: "",
                 dataIndex: "actions",
                 render: (actions: any) =>
@@ -47,27 +48,28 @@ const CustomTable: React.FC<CustomTableProps> = ({ userData }) => {
                     )),
                 className: "actions"
             })
-            handleData(0)
-            setColumns(test)
+            handleData()
+            setColumns(tempKeys)
         }
-    }, [userData])
+    }, [tableKeysData])
 
-    const handleData = (index: number) => {
-        let tests: any = []
+    const handleData = () => {
+        const tempUserData: any = [];
         if (userData && userData.length > 0) {
             userData.forEach((element: any, i: number) => {
-                tests.push({
-                    key: i,
-                    first_name: `${element._id} ${i} `,
-                    last_name: `${element._id} ${i}`,
-                    email: `${element._id} ${i}`,
-                    phone: `${element._id} ${i}`,
-                    gender: `${element._id} ${i}`
-                })
+                tempUserData.push(
+                    {
+                        key: i,
+                        first_name: `${element.first_name} `,
+                        last_name: `${element.last_name}`,
+                        email: `${element.email}`,
+                        phone: `${element.phone}`,
+                        gender: `${element.gender}`
+                    }
+                )
             });
-            tests = tests.map((item: any) => item.key === index ? { ...item, actions: ["Like", "Share"] } : item)
         }
-        setDatas(tests)
+        setDatas(tempUserData);
     }
 
     const handleTableChange: TableProps<any>["onChange"] = (

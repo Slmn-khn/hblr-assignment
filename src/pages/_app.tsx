@@ -4,14 +4,20 @@ import 'antd/dist/reset.css';
 import styles from '@/styles/Home.module.css'
 import { FloatButton } from 'antd';
 import { PlusOutlined, CommentOutlined } from '@ant-design/icons';
-
-import useUserDetails from '../api/apiHooks/useUserDetails'
-import CustomTable from '../components/table/CustomTable';
-import CustomDrawer from '../components/drawer/CustomDrawer'
+import { userDetailsAPIParams, drawerPlacement } from 'consts';
+import { useUserDetails } from 'api/apiHooks'
+import { CustomTable } from 'components/table';
+import { CustomDrawer } from 'components/drawer'
 
 const App = () => {
-  const { isLoading, error, userData, getUserList } = useUserDetails();
+  const { isLoading, error, userData, tableData, getUserList } = useUserDetails();
   const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    getUserList(userDetailsAPIParams.getDetails)
+    getUserList(userDetailsAPIParams.getTypes)
+  }, [])
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -22,14 +28,18 @@ const App = () => {
 
   return (
     <div className={styles.main}>
-      <button onClick={() => getUserList()}>Click Me</button>
       {
-        userData && userData.result && userData.result.length > 0 && (
+        userData && tableData && !error && (
           <>
-            <CustomTable userData={userData.result[0].configuration} />
+            <CustomTable userData={userData.result} tableKeysData={tableData.result[0].configuration} />
             <FloatButton icon={<PlusOutlined />} onClick={() => showDrawer()} />
-            <CustomDrawer placement='right' drawerState={open} onClose={onClose} details={userData.result[0].configuration} />
+            <CustomDrawer placement={drawerPlacement.right} drawerState={open} onClose={onClose} details={tableData.result[0].configuration} />
           </>
+        )
+      }
+      {
+        isLoading && (
+          <div>Loading</div>
         )
       }
     </div>
