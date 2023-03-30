@@ -26,3 +26,13 @@ export interface ResultconfigurationOptions {
     _id: string;
     label: string;
 }
+
+
+export interface UserDetailsTableRow {
+    key: React.Key;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+    gender: string;
+}
