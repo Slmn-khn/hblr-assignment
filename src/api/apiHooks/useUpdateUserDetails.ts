@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import addUserDetails from '../services/addUserDetails';
+import updateUserDetails from '../services/updateUserDetails';
 
-const useAddUserDetails = () => {
+const useUpdateUserDetails = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState({});
-    const [userDetailsResponse, setUserDetailsResponse] = useState();
+    const [userUpdatedDetailsResponse, setUserUpdatedDetailsResponse] = useState();
 
-    const addUserData = async (userData: any) => {
+    const updateUserData = async (userData: any, userId: string) => {
         setIsLoading(true);
         setError({});
-        return await addUserDetails(userData)
+        return await updateUserDetails(userData, userId)
             .then(onSuccess)
             .catch(error => {
                 setError({ error });
@@ -18,15 +18,15 @@ const useAddUserDetails = () => {
     };
 
     const onSuccess = async (response: any) => {
-        return setUserDetailsResponse(response);
+        return setUserUpdatedDetailsResponse(response);
     };
 
     return {
         isLoading,
         error,
-        userDetailsResponse,
-        addUserData,
+        userUpdatedDetailsResponse,
+        updateUserData,
     };
 };
 
-export default useAddUserDetails;
+export default useUpdateUserDetails;

@@ -23,7 +23,8 @@
       "@services": ["./src/services"],
       "@services/*": ["./src/services/*"],
       "@types": ["./src/services/types"],
-      "@consts": ["./src/consts"]
+      "@consts": ["./src/consts"],
+      "@lang": ["./src/lang"]
     }
   },
   "include": ["src/**/*", "next-env.d.ts", "**/*.ts", "**/*.tsx"],

@@ -17,8 +17,15 @@
 .drawerContentsList {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
+.modalHeader {
+  display: flex;
+  align-items: center;
+  max-width: 170px;
+  justify-content: space-between;
+}
 
 
 /* Mobile */

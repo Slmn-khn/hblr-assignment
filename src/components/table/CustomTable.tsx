@@ -1,15 +1,21 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import styles from 'styles/Home.module.css'
 import 'antd/dist/reset.css';
 import styled from "styled-components";
-import { Table } from 'antd';
-import { TableProps } from "antd/lib/table";
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Table, Modal, Spin, Form } from 'antd';
+import { EditOutlined, DeleteOutlined, InfoCircleFilled } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
-import { UserDetailsTableRow } from 'api/types'
+import { useDeleteUserDetails } from 'api/apiHooks';
+import { CustomDrawer } from 'components/drawer'
+import { UserDetailsTableRow, userDetailsResult, userTableDetailsResultconfiguration } from 'api/types'
+import { drawerPlacement, userFormLabels, operationType } from 'consts';
+import { DrawerTitleUpdateUser } from 'lang'
 
 interface CustomTableProps {
-    userData: any
-    tableKeysData: any
+    userData: any;
+    tableKeysData: any;
+    onUserOperation: () => void;
+    onClose: () => void;
 }
 
 const StyledTable = styled((props: any) => <Table {...props} />)`
@@ -17,96 +23,175 @@ const StyledTable = styled((props: any) => <Table {...props} />)`
   background: #e6f7ff !important;
 }
 `;
-const CustomTable: React.FC<CustomTableProps> = ({ userData, tableKeysData }) => {
-    const data: UserDetailsTableRow[] = [];
+
+const CustomTable: React.FC<CustomTableProps> = ({ userData, tableKeysData, onUserOperation }) => {
+    const { isLoading, error, userDetailsResponse, deleteUserData } = useDeleteUserDetails()
+    const [form] = Form.useForm();
     const [columns, setColumns] = React.useState<ColumnsType<UserDetailsTableRow>>([]);
-    const [pagination, setPagination] = React.useState({});
-    const [dataSource, setDataSource] = React.useState<any>([]);
+    const [dataToDelete, setDataToDelete] = React.useState<userDetailsResult>()
+    const [dataSource, setDataSource] = React.useState<Array<UserDetailsTableRow>>([]);
+    const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
+    const [editingRow, setEditingRow] = React.useState<Array<userTableDetailsResultconfiguration>>([])
+    const [open, setOpen] = React.useState(false);
 
     React.useEffect(() => {
+        handleTableRows();
+        handleData();
+    }, [tableKeysData, userData])
+
+    React.useEffect(() => {
+        if (userDetailsResponse) {
+            onUserOperation();
+            setIsModalOpen(false);
+        }
+    }, [userDetailsResponse])
+
+    const showDrawer = () => {
+        setOpen(true);
+    };
+
+    const onClose = () => {
+        setOpen(false);
+        onUserOperation();
+    };
+
+    const handleTableRows = () => {
         setColumns([])
-        tableKeysData.forEach((element: any, index: number) => {
+        tableKeysData.forEach((element: userTableDetailsResultconfiguration, index: number) => {
             if (!element.label) {
                 element.label = element._id
             }
             setColumns((old: any) => {
                 return [...old, {
-                    key: { index },
+                    key: index,
                     title: element.label,
-                    dataIndex: element._id
+                    dataIndex: element._id,
+                    width: '10%',
                 }]
             })
         });
 
         setColumns((old: any) => {
-            return [...old, {
+            return [...old,
+            {
+                key: columns.length + 1,
                 title: "",
                 dataIndex: "actions",
-                render: (actions) => {
-                    // console.log(actions, 'eer')
+                width: '10%',
+                render: (record) => {
                     return (
                         <>
                             {
-                                actions &&
-                                actions.map((action: any) => (
-                                    <a className="action" href=''>
-                                        {action}
-                                    </a>
-                                ))
+                                record &&
+                                <>
+                                    <EditOutlined style={{ margin: '0 10px' }} onClick={() => editUserDetails(record)} />
+                                    <DeleteOutlined style={{ margin: '0 10px' }} onClick={() => deleteUserDetails(record)} />
+                                </>
                             }
                         </>
                     )
                 },
-                className: "actions"
             }]
         })
-        handleData();
+    }
 
-    }, [tableKeysData, userData])
-
-
-    const handleData = () => {
+    const handleData = (addAction?: UserDetailsTableRow) => {
         setDataSource([])
-        userData.forEach((element: any, i: number) => {
-            setDataSource((old: any) => {
+        userData.forEach((element: UserDetailsTableRow, i: number) => {
+            setDataSource((old: Array<UserDetailsTableRow>) => {
                 return [...old, {
                     key: i,
                     first_name: `${element.first_name} `,
                     last_name: `${element.last_name}`,
                     email: `${element.email}`,
                     phone: `${element.phone}`,
-                    gender: `${element.gender}`
+                    gender: `${element.gender}`,
+                    actions: addAction && i === addAction.key ? element : ''
                 }]
             })
         });
     }
 
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
 
-    const deleteUserDetails = (userDetailsRow: any) => {
-        console.log(userDetailsRow, 'hello')
+    const handleOk = () => {
+        dataToDelete && deleteUserData(dataToDelete._id)
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+
+    const deleteUserDetails = (userDetailsRow: userDetailsResult) => {
+        setDataToDelete(userDetailsRow)
+        showModal()
     }
 
-    const editUserDetails = (userDetailsRow: any) => {
-
+    const editUserDetails = (record: any) => {
+        let tempTableKeys: Array<userTableDetailsResultconfiguration> = []
+        tableKeysData.map((elements: any) => {
+            switch (elements._id) {
+                case userFormLabels.first_name:
+                    elements = { ...elements, value: record.first_name, userId: record._id }
+                    tempTableKeys.push(elements)
+                    break;
+                case userFormLabels.last_name:
+                    elements = { ...elements, value: record.last_name, userId: record._id }
+                    tempTableKeys.push(elements)
+                    break;
+                case userFormLabels.gender:
+                    elements = { ...elements, value: record.gender, userId: record._id }
+                    tempTableKeys.push(elements)
+                    break;
+                case userFormLabels.phone:
+                    elements = { ...elements, value: record.phone, userId: record._id }
+                    tempTableKeys.push(elements)
+                    break;
+                case userFormLabels.email:
+                    elements = { ...elements, value: record.email, userId: record._id }
+                    tempTableKeys.push(elements)
+                    break;
+            }
+        })
+        showDrawer()
+        setEditingRow(tempTableKeys)
     }
 
-    const handleAction = (data: any, type: string) => {
-        let test = dataSource.filter((ele: any) => ele.key === data.key)
-        test = { ...test[0], actions: ["Like", "Share"] }
-        console.log(test, 't1')
-        let test2 = dataSource.filter((ele: any) => ele.key !== data.key)
-        test2.push(test)
-        console.log(test2, 't2')
-        setDataSource(test2)
+    const ModalHandler = () => {
+        return (
+            <Modal title={""} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                {
+                    dataToDelete && (
+                        <>
+                            <div className={styles.modalHeader}>
+                                <InfoCircleFilled style={{ fontSize: '20px', color: '#08c' }} /> <h2 style={{ marginBottom: 0 }}>Are you sure ?</h2>
+                            </div>
+                            <p style={{ marginTop: '12px' }}>Want to delete {dataToDelete.first_name} {dataToDelete.last_name} details</p>
+                        </>
+                    )
+                }
+            </Modal>
+        )
     }
 
     return (
         <div>
-            <StyledTable columns={columns} dataSource={dataSource} rowKey="email" onRow={(r: any) => ({
-                onMouseEnter: () => handleAction(r, 'enter'),
-                onMouseLeave: () => handleAction(r, 'leave')
-            })}
-            />
+            <Form form={form}>
+                <StyledTable columns={columns} dataSource={dataSource} rowKey="email" onRow={(r: any) => ({
+                    onMouseEnter: () => handleData(r)
+                })}
+                />
+            </Form>
+            <CustomDrawer title={DrawerTitleUpdateUser} placement={drawerPlacement.left} drawerState={open} onClose={onClose} details={editingRow} operationType={operationType.update} onUserOperation={onUserOperation} />
+            {ModalHandler()}
+            {
+                isLoading && !error && (
+                    <Spin />
+                )
+            }
         </div>
     )
 }

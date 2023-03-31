@@ -17,3 +17,14 @@ export enum drawerPlacement {
     top = 'top',
     bottom = 'bottom'
 }
+
+export enum operationType {
+    create = 'create',
+    update = 'update'
+}
+
+export enum genderOptions {
+    male = "male",
+    female = "female",
+    other = "other"
+}
