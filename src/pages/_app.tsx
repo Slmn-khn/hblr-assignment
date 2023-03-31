@@ -39,11 +39,11 @@ const App = () => {
     <div className={styles.main}>
       {
         userData && tableData && !error && tableData.result.length > 0 && (
-          <>
+          <div className={styles.center}>
             <CustomTable userData={userData.result} tableKeysData={tableData.result[0].configuration} onClose={onClose} onUserOperation={onUserOperation} />
             <FloatButton icon={<PlusOutlined />} onClick={() => showDrawer()} />
             <CustomDrawer title={DrawerTitleAddUser} placement={drawerPlacement.right} drawerState={open} onClose={onClose} details={tableData.result[0].configuration} operationType={userOperation.create} onUserOperation={onUserOperation} />
-          </>
+          </div>
         )
       }
       {

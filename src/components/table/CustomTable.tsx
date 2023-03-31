@@ -65,8 +65,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ userData, tableKeysData, onUs
                 return [...old, {
                     key: index,
                     title: element.label,
-                    dataIndex: element._id,
-                    width: '10%',
+                    dataIndex: element._id
                 }]
             })
         });
@@ -77,7 +76,6 @@ const CustomTable: React.FC<CustomTableProps> = ({ userData, tableKeysData, onUs
                 key: columns.length + 1,
                 title: "",
                 dataIndex: "actions",
-                width: '10%',
                 render: (record) => {
                     return (
                         <>
@@ -176,12 +174,12 @@ const CustomTable: React.FC<CustomTableProps> = ({ userData, tableKeysData, onUs
             </Modal>
         )
     }
-
     return (
-        <div>
+        <div className={styles.table}>
             <Form form={form}>
-                <StyledTable columns={columns} dataSource={dataSource} rowKey="email" onRow={(r: any) => ({
-                    onMouseEnter: () => handleData(r)
+                <StyledTable columns={columns} dataSource={dataSource} rowKey="email" onRow={(rowData: any) => ({
+                    onClick: () => window.innerWidth < 700 && handleData(rowData),
+                    onMouseEnter: () => window.innerWidth > 700 && handleData(rowData),
                 })}
                 />
             </Form>

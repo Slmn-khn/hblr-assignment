@@ -28,7 +28,7 @@ const DrawerContents: React.FC<DrawerContentsProps> = ({ details, operationType,
 
     React.useEffect(() => {
         handleInitialFormValues()
-    }, []);
+    }, [details]);
 
     React.useEffect(() => {
         onUserOperation()
@@ -67,7 +67,6 @@ const DrawerContents: React.FC<DrawerContentsProps> = ({ details, operationType,
             }
         })
     }
-
     const onFinish = (values: any) => {
         switch (operationType) {
             case userOperation.create:
@@ -80,6 +79,8 @@ const DrawerContents: React.FC<DrawerContentsProps> = ({ details, operationType,
                 break;
         }
     };
+
+
     const onReset = () => {
         form.resetFields();
         if (operationType === userOperation.update) {
@@ -115,7 +116,7 @@ const DrawerContents: React.FC<DrawerContentsProps> = ({ details, operationType,
                                 size="large"
                             >
                                 <Option value={genderOptions.male}>{genderOptions.male}</Option>
-                                <Option value={genderOptions.male}>{genderOptions.male}</Option>
+                                <Option value={genderOptions.female}>{genderOptions.female}</Option>
                                 <Option value={genderOptions.other}>{genderOptions.other}</Option>
                             </Select>
                         </Form.Item>
@@ -123,13 +124,6 @@ const DrawerContents: React.FC<DrawerContentsProps> = ({ details, operationType,
                             noStyle
                             shouldUpdate={(prevValues, currentValues) => prevValues.gender !== currentValues.gender}
                         >
-                            {({ getFieldValue }) =>
-                                getFieldValue('gender') === 'other' ? (
-                                    <Form.Item name={details._id} rules={[{ required: true }]}>
-                                        <Input placeholder={details.label} size="large" />
-                                    </Form.Item>
-                                ) : null
-                            }
                         </Form.Item>
                     </>
                 )
