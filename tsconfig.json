@@ -30,17 +30,3 @@
   "include": ["src/**/*", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
-
-
-// "paths": {
-//   "@api": ["api"],
-//   "@api/*": ["api/*"],
-//   "@services": ["services"],
-//   "@services/*": ["services/*"],
-//   "@baseService": ["services/base/index"],
-//   "@userService": ["services/user/index"],
-//   "@serviceUtils": ["services/utils/index"],
-//   "@utils": ["utils"],
-//   "@utils/*": ["utils/*"],
-//   "@types": ["types"]
-// },
