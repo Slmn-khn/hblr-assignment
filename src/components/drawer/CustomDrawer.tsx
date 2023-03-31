@@ -24,7 +24,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({ title, placement, drawerSta
                 open={drawerState}
                 key={placement}
             >
-                <DrawerContents details={details} operationType={operationType} onUserOperation={onUserOperation} />
+                <DrawerContents details={details} operationType={operationType} onUserOperation={onUserOperation} onClose={onClose} />
             </Drawer>
         </>
     );

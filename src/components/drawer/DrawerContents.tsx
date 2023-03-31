@@ -3,7 +3,7 @@ import styles from 'styles/Home.module.css'
 import { Button, Form, Input, Select, Spin } from 'antd';
 import { useAddUserDetails, useUpdateUserDetails } from 'api/apiHooks';
 import { userFormLabels, operationType as userOperation, genderOptions } from 'consts';
-import { ResetButtonText, SubmitButtonText, ResponseSuccess, GenderPlaceHolder } from 'lang'
+import { ResetButtonText, SubmitButtonText, ResponseSuccess, GenderPlaceHolder, CloseButtonText } from 'lang'
 
 const { Option } = Select;
 
@@ -20,8 +20,9 @@ interface DrawerContentsProps {
     details: any
     operationType: string;
     onUserOperation: () => void;
+    onClose: () => void;
 };
-const DrawerContents: React.FC<DrawerContentsProps> = ({ details, operationType, onUserOperation }: DrawerContentsProps) => {
+const DrawerContents: React.FC<DrawerContentsProps> = ({ details, operationType, onUserOperation, onClose }: DrawerContentsProps) => {
     const [form] = Form.useForm();
     const { isLoading, error, userDetailsResponse, addUserData } = useAddUserDetails();
     const { isLoading: isUpdateLoading, error: isUpdateError, userUpdatedDetailsResponse, updateUserData } = useUpdateUserDetails();
@@ -153,9 +154,16 @@ const DrawerContents: React.FC<DrawerContentsProps> = ({ details, operationType,
                             <Button type="primary" htmlType="submit" size="large" style={{ marginRight: "12px" }}>
                                 {SubmitButtonText}
                             </Button>
-                            <Button htmlType="button" size="large" onClick={onReset}>
+                            <Button htmlType="button" size="large" onClick={onReset} style={{ marginRight: "12px" }}>
                                 {ResetButtonText}
                             </Button>
+                            {
+                                window.innerWidth < 700 && (
+                                    <Button htmlType="button" size="large" onClick={onClose}>
+                                        {CloseButtonText}
+                                    </Button>
+                                )
+                            }
                         </Form.Item>
                     </Form>
                 )

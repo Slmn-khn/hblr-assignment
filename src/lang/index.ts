@@ -2,6 +2,7 @@
 
 export const SubmitButtonText = "Submit";
 export const ResetButtonText = "Reset";
+export const CloseButtonText = "Close";
 export const ResponseSuccess = `Details has been `;
 export const GenderPlaceHolder = "Select a option";
 export const DrawerTitleUpdateUser = "Update exisitng user details";
